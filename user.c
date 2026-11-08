@@ -589,7 +589,12 @@ int call_hooks(char *hook_type, char *p1, char *p2, char *p3, char *p4)
 
 void deluser()
 {
-  send_template( "del_user_confirm.html" );
+  if (AdminType != DOMAIN_ADMIN) {
+    snprintf (StatusMessage, sizeof(StatusMessage), "%s", html_text[142]);
+    vclose();
+    exit(0);
+  }
+send_template( "del_user_confirm.html" );
 }
 
 void delusergo()
@@ -636,16 +641,27 @@ void count_users()
   }
 }
 
-void setremotecatchall() 
+void setremotecatchall()
 {
-  send_template("setremotecatchall.html");
+  if (AdminType != DOMAIN_ADMIN) {
+    snprintf (StatusMessage, sizeof(StatusMessage), "%s", html_text[142]);
+    vclose();
+    exit(0);
+  }
+send_template("setremotecatchall.html");
 }
 
 void set_qmaildefault(char *opt)
 {
  FILE *fs;
 
-  if ( (fs = fopen(".qmail-default", "w")) == NULL ) {
+  if (AdminType != DOMAIN_ADMIN) {
+    snprintf (StatusMessage, sizeof(StatusMessage), "%s", html_text[142]);
+    vclose();
+    exit(0);
+  }
+
+if ( (fs = fopen(".qmail-default", "w")) == NULL ) {
     printf ("%s %s<br>\n", html_text[144], ".qmail-default");
   } else {
     fprintf(fs,"| %s/bin/vdelivermail '' %s\n", VPOPMAILDIR, opt);
