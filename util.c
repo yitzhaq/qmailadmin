@@ -199,6 +199,12 @@ int valid_local_name(const char *name)
   return 1;
 }
 
+/* cut s at the first line break: for values written as one header line */
+void one_line(char *s)
+{
+  s[strcspn(s, "\r\n")] = '\0';
+}
+
 int check_email_addr( char *addr )
 {
  char *taddr = addr;
